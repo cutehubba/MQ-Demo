@@ -1,16 +1,21 @@
 package com.magq.mq.client;
 
 import com.magq.mq.config.Config;
+import lombok.Getter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 
     private String name;
+    @Getter
+    private List<String> subscribedPlatforms = new ArrayList<>();
 
     // 用户构造器
     public User(String name) {
@@ -57,4 +62,9 @@ public class User {
             e.printStackTrace();
         }
     }
+
+    public void checkSubscriptions() {
+        System.out.println(name + " 的订阅平台： " + subscribedPlatforms);
+    }
+
 }
