@@ -6,7 +6,7 @@ package com.magq.mq.config;
 public class Config {
 
     // 消息队列的服务端口
-    public static final int SERVICE_PORT = 9999;
+    public static final int SERVICE_PORT = 8080;
 
     // 操作类型
     public static final String SUBSCRIBE = "SUBSCRIBE";
