@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -25,16 +24,15 @@ public class User {
     // 订阅平台
     public void subscribe(String platform) {
         try (Socket socket = new Socket("localhost", Config.SERVICE_PORT)) {
-            OutputStream outputStream = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(outputStream, true);
-            // 获取消息的逻辑
-            System.out.println(name + " is getting messages."); // Debug print
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             // 发送订阅指令
             writer.println(Config.SUBSCRIBE);
             writer.println(this.name);
             writer.println(platform);
 
-            writer.close();
+            // 记录订阅的平台
+            subscribedPlatforms.add(platform);
+            System.out.println(name + " 已成功订阅平台: " + platform);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,9 +41,7 @@ public class User {
     // 获取消息
     public void getMessages() {
         try (Socket socket = new Socket("localhost", Config.SERVICE_PORT)) {
-            OutputStream outputStream = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(outputStream, true);
-
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             // 发送获取消息指令
             writer.println(Config.GET);
             writer.println(this.name);
@@ -53,18 +49,21 @@ public class User {
             // 接收返回的消息
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String response;
+            System.out.println(name + " 正在接收消息:");
             while ((response = reader.readLine()) != null) {
-                System.out.println("Received message: " + response);
+                System.out.println("收到消息: " + response);
             }
-
-            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // 检查订阅的平台
     public void checkSubscriptions() {
-        System.out.println(name + " 的订阅平台： " + subscribedPlatforms);
+        if (subscribedPlatforms.isEmpty()) {
+            System.out.println(name + " 没有订阅任何平台。");
+        } else {
+            System.out.println(name + " 的订阅平台： " + subscribedPlatforms);
+        }
     }
-
 }

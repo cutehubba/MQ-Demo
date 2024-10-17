@@ -31,24 +31,39 @@ public class Test {
         user4.subscribe("平台4");  // 用户4 试图订阅一个不存在的平台
 
         // 发布消息
+        long startTime = System.currentTimeMillis();
         platform1.produce("来自平台1的消息1！");
         platform1.produce("来自平台1的消息2！");
         platform2.produce("来自平台2的消息1！");
         platform3.produce("来自平台3的消息1！");
         platform1.produce("来自平台1的消息3！");
+        long endTime = System.currentTimeMillis();
+        System.out.println("消息发布耗时: " + (endTime - startTime) + "毫秒");
 
         // 用户获取消息
         System.out.println("用户1的消息：");
+        long user1StartTime = System.currentTimeMillis();
         user1.getMessages();  // 用户1 应该收到 平台1 的消息
+        long user1EndTime = System.currentTimeMillis();
+        System.out.println("用户1 获取消息耗时: " + (user1EndTime - user1StartTime) + "毫秒");
 
         System.out.println("用户2的消息：");
+        long user2StartTime = System.currentTimeMillis();
         user2.getMessages();  // 用户2 应该收到 平台2 的消息
+        long user2EndTime = System.currentTimeMillis();
+        System.out.println("用户2 获取消息耗时: " + (user2EndTime - user2StartTime) + "毫秒");
 
         System.out.println("用户3的消息：");
+        long user3StartTime = System.currentTimeMillis();
         user3.getMessages();  // 用户3 应该收到 平台1 和 平台3 的消息
+        long user3EndTime = System.currentTimeMillis();
+        System.out.println("用户3 获取消息耗时: " + (user3EndTime - user3StartTime) + "毫秒");
 
         System.out.println("用户4的消息（未订阅任何有效平台）：");
+        long user4StartTime = System.currentTimeMillis();
         user4.getMessages();  // 用户4 应该没有消息
+        long user4EndTime = System.currentTimeMillis();
+        System.out.println("用户4 获取消息耗时: " + (user4EndTime - user4StartTime) + "毫秒");
 
         // 模拟用户4尝试发布到不存在的平台
         System.out.println("尝试向未订阅的平台发送消息：");
